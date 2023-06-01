@@ -1,3 +1,8 @@
 from django.contrib import admin
 
-# Register your models here.
+from .models import CustomChat
+
+
+@admin.register(CustomChat)
+class CustomChatAdmin(admin.ModelAdmin):
+    list_display = ('question', 'answer')

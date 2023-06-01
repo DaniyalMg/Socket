@@ -3,28 +3,27 @@ from asgiref.sync import async_to_sync
 
 import json
 
+from .models import CustomChat
+
 
 class AdminNotify(WebsocketConsumer):
     def connect(self):
-        # self.room_name = 'admin'
-        # self.room_group_name = 'admin_group'
-        #
-        # async_to_sync(self.channel_layer.group_add)(
-        #     self.room_group_name,
-        #     self.channel_name
-        # )
         self.accept()
-        self.send(text_data=json.dumps({
-            'status': 'add'
-        }))
+        print("connected", self.channel_name)
 
     def disconnect(self, code):
         pass
 
     def receive(self, text_data=None, bytes_data=None):
-        pass
+        print(text_data)
 
-    def reserve_notify(self, event):
-        reserve = event['reserve']
+        try:
 
-        self.send(text_data=reserve)
+            chat = CustomChat.objects.get(question=text_data).answer
+        except CustomChat.DoesNotExist:
+
+            chat = 'جوابی برای کلمه ارسال شده وجود ندارد!'
+
+        self.send(text_data=json.dumps({
+            'answer': chat
+        }))
