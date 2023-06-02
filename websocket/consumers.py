@@ -9,13 +9,11 @@ from .models import CustomChat
 class AdminNotify(WebsocketConsumer):
     def connect(self):
         self.accept()
-        print("connected", self.channel_name)
 
     def disconnect(self, code):
         pass
 
     def receive(self, text_data=None, bytes_data=None):
-        print(text_data)
 
         try:
 
@@ -25,5 +23,5 @@ class AdminNotify(WebsocketConsumer):
             chat = 'جوابی برای کلمه ارسال شده وجود ندارد!'
 
         self.send(text_data=json.dumps({
-            'answer': chat
+            'answer': chat,
         }))
